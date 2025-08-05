@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trial Searcher</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        h1 {
+            color: #2e6da4;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+        }
+        .results {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Trial Searcher</h1>
+    <form id="searchForm">
+        <label for="drug">Enter Drug Name:</label>
+        <input type="text" id="drug" name="drug" required>
+        <button type="submit">Search</button>
+    </form>
+
+    <div class="results" id="results"></div>
+
+    <script>
+        document.getElementById("searchForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const drug = document.getElementById("drug").value;
+
+            fetch("/search", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ drug })
+            })
+            .then(response => response.json())
+            .then(data => {
+                let html = `<h2>Results for "${drug}"</h2>`;
+                html += `<p><strong>Number of Trials:</strong> ${data.number_of_trials}</p>`;
+                html += `<p><strong>Drugs Used Alongside:</strong> ${data.other_drugs.join(', ')}</p>`;
+                html += `<h3>Patient Count per Drug</h3><ul>`;
+                for (let drug in data.patients_per_drug) {
+                    html += `<li>${drug}: ${data.patients_per_drug[drug]} patients</li>`;
