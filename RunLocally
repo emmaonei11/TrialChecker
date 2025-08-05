@@ -1,0 +1,19 @@
+# Set up info
+
+pip install flask requests beautifulsoup4
+
+# Set Up Structure
+
+project/
+│
+├── app.py
+├── templates/
+│   └── index.html
+
+# Run it
+
+python app.py
+
+# Go to browser
+
+http://127.0.0.1:5000
